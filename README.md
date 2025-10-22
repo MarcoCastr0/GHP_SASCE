@@ -1,16 +1,2 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+MER:
+https://www.mermaidchart.com/play?utm_source=mermaid_live_editor&utm_medium=toggle#pako:eNrVWNuS4jYQ_RUX7_MD--YYmDghmDKQJ6pcGrthNGVLjixTqczsv6d9AWy5pblkJ7v7AgU6arVOt0639DxLZQazLzNQc85OihUHcdAZV5BqLoW3-6X5vd_u_TiMvOfmx0FzoT2eJXVVM8Wlt_ndO8wOM8_rRiutuDh5QhYPCq6gPQlKpVJgG3xk1WOSSqEVq0Awz74KOcRKyHOeyfFg77uSubccr_ogZQ5MeFBpljDc_tmYmjENmhfgHSF9ZEmqgKUNRy4Q2qlZzv-ZIL_iB37Fi_twu4ujxN_Pw10Uh75BsoITxw1NWDZisCQZ1LyU6MLUy-E4CM0zlpE0kWMa_tbemeVSQZUwRJxqWTkgooazCXgDlz1D_ja8X_tBGK0NZljFT6KbRXNzUnU5YaYfq9A3YRkrlTxCJZVtGJDwrOGVZVDw1LbEUTHxxJJHqTBCzALqInTbydIV5ZambOrYpyRmtDIzEY-M86g3APokZ1ClipeWpTZxtFxso9hY7xqGj2S-qAtQMuFZk8FHnnbbNLxrs_SBS5S9I2dEBqcNRZfZUH2-HCy2O9QBf71bGGSgKNUZx8MGn0fHSJMTLirNdd0AmS2uGnI4SkHoZL_fJqsLjotKgt22yli1qRF-pAv1CV0_gUg5XQEuPlhx30XXo2C_aUUrsWS3TOvSJV7fQoQwYZIKCmbWznYfjS5hkDn6YBs9cjo0hfwQidcc3yyC0F-Fc39uYweqEjCQeVt83kfQWJNGhkgcP0OOXUZRgp4kz7VIY4kOA6IGYXlDMykVx2GJHcLIbgTSWlXScxggAN0hukmrfZlrcM4NEzLBSRm4Idh86fcdpImEJffxfhNZhayvz3R0B3q3fHdxf_VwDBQKZY4qTSOMQmYUHZ2Gi0zarbyNs5taWAvAa3rxKmE_sWK0eWSnhsyjsQx0EFu9y_hJ0pB-hU4knMylrGuVB4GgemIFf9W84lpWV2kycd-lXm0WeL-b4zUk8OeLP8LAPLZ99rhZvoCcPFtAoyM5TbHB8CTHvgVhPQ3r8M_FykpCmwZuCjoIkUVSYe_VD0_XDfzYD3YYg-0uDHxSOFOmcG9IHrZlKXvPlWdYSAwrFK69tjmAE82ivH1Nrv6TfP-4SrX1V5MeobtqblxnooPsXYnVQUjlz5qOnpMs9X1_ySviGSRlTYjo6_2wragfLheGH6mvpqh-Leuct_6fN-viRbCPtxFJyaVzfD8ho8bTUfGI7BFSs4rqDefhMgwmD4nXDHZK6xXlLC82lP3G2fu2jP31b37yaxT701c44y1n8z9kRmu0Vm3Mk4KLWkuK0iBaL1dhsJuUCymOOcf7syXy9jenUbm4WnFLhAXXm6rgjIdrkiojAcG7Sw25tp2BDG9nadtqg01ALhYMRM_TLsQW0vqWaD7DOROxAX_ooav1oT-slAOWs2q8svWgjzjQffav-S8vd3fyefoA_eUwa7QGJ5vYG30U5qu8u3t5iaMVDmoOAggLl-s-Qsoa8A5agSJgt1Z_CryY6JDTd5bx6mM0-fTgmjDaMS9KpjSJG7wQILCqnwAzuafnthlzc13n1GwR0K6AFGxzqAvi2G_TaheNEfrMRVrnzIU3b1pvmzW5POA0PIR9Re1mmpatXDTvfrdt0dNGYemObXbl25zS-Wh09kPSXStRjfmYeHqe0R2Pp7R12sS1f1pxoxI_YWkAHFOTyydG2LInawvrc6cv1ohpO0BkGESHui1iT4BSNe_qhWvauOTiHOzflAIC3wfjUuuuqtAEUNHGDcHvFQu9KeVFSUyvKZUb8TwUcEtcsBqdpMIGtp0hZl__BcmAE94
