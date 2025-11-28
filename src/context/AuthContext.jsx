@@ -37,11 +37,16 @@ export const AuthProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
+  const isAdmin = () => {
+    return currentUser && currentUser.id_rol === 1;
+  };
+
   const value = {
     currentUser,
     login,
     logout,
     isAuthenticated: !!currentUser,
+    isAdmin: isAdmin(),
   };
 
   return (

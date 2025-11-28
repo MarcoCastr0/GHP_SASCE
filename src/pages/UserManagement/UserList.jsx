@@ -1,9 +1,21 @@
 // src/pages/UserManagement/UserList.jsx
 import React from 'react';
-import './UserManagement.css';
 
-const UserList = ({ users, onEdit, onDelete, onActivate }) => {
-  if (users.length === 0) {
+const ROLES = {
+  1: 'ADMINISTRADOR',
+  2: 'COORDINADOR',
+  3: 'COORDINADOR_INFRAESTRUCTURA',
+  4: 'PROFESOR',
+  5: 'ESTUDIANTE'
+};
+
+const UserList = ({ users, onToggleStatus }) => {
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    return new Date(dateString).toLocaleDateString('es-ES');
+  };
+
+  if (!users || users.length === 0) {
     return (
       <div className="no-users">
         <p>No hay usuarios registrados</p>
@@ -16,10 +28,11 @@ const UserList = ({ users, onEdit, onDelete, onActivate }) => {
       <table className="users-table">
         <thead>
           <tr>
-            <th>Nombre</th>
-            <th>Correo</th>
+            <th>ID</th>
             <th>Usuario</th>
+            <th>Correo</th>
             <th>Rol</th>
+            <th>Fecha Creación</th>
             <th>Estado</th>
             <th>Acciones</th>
           </tr>
@@ -27,46 +40,27 @@ const UserList = ({ users, onEdit, onDelete, onActivate }) => {
         <tbody>
           {users.map((user) => (
             <tr key={user.id_usuario}>
-              <td>{user.nombre} {user.apellido}</td>
-              <td>{user.correo}</td>
+              <td>{user.id_usuario}</td>
               <td>{user.nombre_usuario}</td>
+              <td>{user.correo}</td>
               <td>
-                <span className={`role-badge role-${user.rol?.nombre_rol?.toLowerCase()}`}>
-                  {user.rol?.nombre_rol}
+                <span className={`role-badge role-${user.id_rol}`}>
+                  {ROLES[user.id_rol] || 'DESCONOCIDO'}
                 </span>
               </td>
+              <td>{formatDate(user.fecha_creacion)}</td>
               <td>
                 <span className={`status-badge ${user.esta_activo ? 'active' : 'inactive'}`}>
                   {user.esta_activo ? 'Activo' : 'Inactivo'}
                 </span>
               </td>
               <td>
-                <div className="action-buttons">
-                  <button
-                    className="btn-edit"
-                    onClick={() => onEdit(user)}
-                    title="Editar usuario"
-                  >
-                    ✏️
-                  </button>
-                  {user.esta_activo ? (
-                    <button
-                      className="btn-delete"
-                      onClick={() => onDelete(user.id_usuario)}
-                      title="Desactivar usuario"
-                    >
-                      🚫
-                    </button>
-                  ) : (
-                    <button
-                      className="btn-activate"
-                      onClick={() => onActivate(user.id_usuario)}
-                      title="Activar usuario"
-                    >
-                      ✅
-                    </button>
-                  )}
-                </div>
+                <button
+                  className={`btn-action ${user.esta_activo ? 'btn-deactivate' : 'btn-activate'}`}
+                  onClick={() => onToggleStatus(user.id_usuario, user.esta_activo)}
+                >
+                  {user.esta_activo ? 'Desactivar' : 'Activar'}
+                </button>
               </td>
             </tr>
           ))}

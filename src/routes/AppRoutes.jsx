@@ -7,9 +7,18 @@ import Dashboard from '../pages/Dashboard/Dashboard';
 import UserManagement from '../pages/UserManagement/UserManagement';
 
 // Componente para rutas protegidas
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? children : <Navigate to="/login" />;
+const ProtectedRoute = ({ children, requireAdmin = false }) => {
+  const { isAuthenticated, isAdmin } = useAuth();
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+  
+  if (requireAdmin && !isAdmin) {
+    return <Navigate to="/dashboard" />;
+  }
+  
+  return children;
 };
 
 // Componente para rutas públicas
@@ -41,11 +50,11 @@ const AppRoutes = () => {
         } 
       />
       
-      {/* Ruta protegida - Gestión de Usuarios */}
+      {/* Ruta protegida - Gestión de Usuarios (SOLO ADMIN) */}
       <Route 
         path="/usuarios" 
         element={
-          <ProtectedRoute>
+          <ProtectedRoute requireAdmin={true}>
             <UserManagement />
           </ProtectedRoute>
         } 
