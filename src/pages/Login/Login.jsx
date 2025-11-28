@@ -1,16 +1,18 @@
 // src/pages/Login/Login.jsx
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './Login.css';
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
-    email: '',
+    correo: '',
     password: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setCredentials({
@@ -24,11 +26,22 @@ const Login = () => {
     setLoading(true);
     setError('');
 
+    // Validación básica
+    if (!credentials.correo || !credentials.password) {
+      setError('Correo y contraseña son requeridos');
+      setLoading(false);
+      return;
+    }
+
+    // Debug: Ver qué se está enviando
+    console.log('Credenciales a enviar:', credentials);
+
     try {
       await login(credentials);
-      // La redirección se manejará en el Router
+      navigate('/dashboard');
     } catch (err) {
-      setError(err.message);
+      console.error('Error en login:', err);
+      setError(err.message || 'Credenciales inválidas');
     } finally {
       setLoading(false);
     }
@@ -44,15 +57,17 @@ const Login = () => {
         
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email">Correo Electrónico</label>
+            <label htmlFor="correo">Correo Electrónico</label>
             <input
               type="email"
-              id="email"
-              name="email"
-              value={credentials.email}
+              id="correo"
+              name="correo"
+              value={credentials.correo}
               onChange={handleChange}
               required
               disabled={loading}
+              placeholder="ejemplo@correo.com"
+              autoComplete="email"
             />
           </div>
           
@@ -66,6 +81,8 @@ const Login = () => {
               onChange={handleChange}
               required
               disabled={loading}
+              placeholder="Ingresa tu contraseña"
+              autoComplete="current-password"
             />
           </div>
           
@@ -79,7 +96,7 @@ const Login = () => {
         </form>
         
         <div className="login-info">
-          <p>Para demo, usa cualquier usuario existente de la base de datos</p>
+          <p><small>Usa las credenciales de un administrador para acceder</small></p>
         </div>
       </div>
     </div>

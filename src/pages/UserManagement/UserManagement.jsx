@@ -1,103 +1,97 @@
 // src/pages/UserManagement/UserManagement.jsx
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import { userService } from '../../services/userService';
 import UserList from './UserList';
 import UserForm from './UserForm';
-import { userService } from '../../services/userService';
 import './UserManagement.css';
 
 const UserManagement = () => {
+  const { isAdmin } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [editingUser, setEditingUser] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
+    if (!isAdmin) {
+      setError('No tienes permisos para acceder a esta sección');
+      setLoading(false);
+      return;
+    }
     loadUsers();
-  }, []);
+  }, [isAdmin, refreshTrigger]);
 
   const loadUsers = async () => {
     try {
       setLoading(true);
-      const usersData = await userService.getUsers();
-      setUsers(usersData);
+      setError('');
+      const data = await userService.getUsers();
+      setUsers(data);
     } catch (err) {
-      setError('Error al cargar los usuarios: ' + err.message);
+      setError(err.message || 'Error al cargar usuarios');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCreateUser = () => {
-    setEditingUser(null);
-    setShowForm(true);
-  };
-
-  const handleEditUser = (user) => {
-    setEditingUser(user);
-    setShowForm(true);
-  };
-
-  const handleCloseForm = () => {
+  const handleUserCreated = () => {
     setShowForm(false);
-    setEditingUser(null);
+    setRefreshTrigger(prev => prev + 1);
   };
 
-  const handleUserSaved = () => {
-    handleCloseForm();
-    loadUsers();
-  };
-
-  const handleDeleteUser = async (userId) => {
-    if (window.confirm('¿Estás seguro de que quieres desactivar este usuario?')) {
-      try {
-        await userService.deleteUser(userId);
-        await loadUsers();
-      } catch (err) {
-        setError('Error al desactivar usuario: ' + err.message);
-      }
-    }
-  };
-
-  const handleActivateUser = async (userId) => {
+  const handleToggleStatus = async (userId, estaActivo) => {
     try {
-      await userService.activateUser(userId);
-      await loadUsers();
+      if (estaActivo) {
+        await userService.desactivarUser(userId);
+      } else {
+        await userService.activarUser(userId);
+      }
+      setRefreshTrigger(prev => prev + 1);
     } catch (err) {
-      setError('Error al activar usuario: ' + err.message);
+      setError(err.message || 'Error al cambiar estado del usuario');
     }
   };
 
-  if (loading) {
-    return <div className="loading">Cargando usuarios...</div>;
+  if (!isAdmin) {
+    return (
+      <div className="user-management">
+        <div className="error-container">
+          <h2>Acceso Denegado</h2>
+          <p>Solo los administradores pueden gestionar usuarios</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="user-management">
       <div className="user-management-header">
-        <h2>Gestión de Usuarios</h2>
+        <h1>Gestión de Usuarios</h1>
         <button 
           className="btn-primary"
-          onClick={handleCreateUser}
+          onClick={() => setShowForm(!showForm)}
         >
-          + Crear Nuevo Usuario
+          {showForm ? 'Cancelar' : 'Crear Nuevo Usuario'}
         </button>
       </div>
 
       {error && <div className="error-message">{error}</div>}
 
-      <UserList
-        users={users}
-        onEdit={handleEditUser}
-        onDelete={handleDeleteUser}
-        onActivate={handleActivateUser}
-      />
-
       {showForm && (
-        <UserForm
-          user={editingUser}
-          onClose={handleCloseForm}
-          onSave={handleUserSaved}
+        <UserForm 
+          onUserCreated={handleUserCreated}
+          onCancel={() => setShowForm(false)}
+        />
+      )}
+
+      {loading ? (
+        <div className="loading">Cargando usuarios...</div>
+      ) : (
+        <UserList 
+          users={users}
+          onToggleStatus={handleToggleStatus}
         />
       )}
     </div>

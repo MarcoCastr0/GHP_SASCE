@@ -1,25 +1,38 @@
 // src/services/authService.js
 import { apiClient } from './api';
 
-// NOTA: Necesitarás implementar el endpoint de login en el backend
 export const authService = {
   async login(credentials) {
-    // Esto es temporal - necesitarás crear el endpoint de login en el backend
-    const users = await apiClient.get('/usuarios');
-    const user = users.find(u => 
-      u.correo === credentials.email && u.esta_activo
-    );
-    
-    if (user) {
-      // En un caso real, aquí verificarías la contraseña hasheada
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      return user;
+    try {
+      console.log('authService.login - Datos a enviar:', {
+        correo: credentials.correo,
+        password: credentials.password
+      });
+
+      // POST /api/auth/login
+      const response = await apiClient.post('/auth/login', {
+        correo: credentials.correo,
+        password: credentials.password
+      });
+
+      console.log('authService.login - Respuesta recibida:', response);
+      
+      // Guardar token y usuario
+      if (response.success && response.accessToken) {
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('currentUser', JSON.stringify(response.user));
+        return response.user;
+      }
+      
+      throw new Error('Respuesta de login inválida');
+    } catch (error) {
+      console.error('authService.login - Error:', error);
+      throw new Error(error.message || 'Error al iniciar sesión');
     }
-    
-    throw new Error('Credenciales inválidas');
   },
 
   logout() {
+    localStorage.removeItem('accessToken');
     localStorage.removeItem('currentUser');
   },
 
@@ -28,7 +41,16 @@ export const authService = {
     return user ? JSON.parse(user) : null;
   },
 
+  getToken() {
+    return localStorage.getItem('accessToken');
+  },
+
   isAuthenticated() {
-    return !!this.getCurrentUser();
+    return !!this.getToken() && !!this.getCurrentUser();
+  },
+
+  isAdmin() {
+    const user = this.getCurrentUser();
+    return user && user.id_rol === 1;
   },
 };

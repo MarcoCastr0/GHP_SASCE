@@ -1,49 +1,26 @@
 // src/pages/UserManagement/UserForm.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { userService } from '../../services/userService';
-import './UserManagement.css';
 
-const UserForm = ({ user, onClose, onSave }) => {
+const ROLES_OPTIONS = [
+  { value: 'ADMINISTRADOR', label: 'Administrador' },
+  { value: 'COORDINADOR', label: 'Coordinador' },
+  { value: 'COORDINADOR_INFRAESTRUCTURA', label: 'Coordinador de Infraestructura' },
+  { value: 'PROFESOR', label: 'Profesor' },
+  { value: 'ESTUDIANTE', label: 'Estudiante' }
+];
+
+const UserForm = ({ onUserCreated, onCancel }) => {
   const [formData, setFormData] = useState({
     nombre_usuario: '',
     correo: '',
-    hash_contrasena: '',
+    password: '',
+    nombre_rol: '',
     nombre: '',
-    apellido: '',
-    id_rol: ''
+    apellido: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [roles, setRoles] = useState([]);
-
-  useEffect(() => {
-    loadRoles();
-    if (user) {
-      setFormData({
-        nombre_usuario: user.nombre_usuario || '',
-        correo: user.correo || '',
-        hash_contrasena: '', // No mostrar contraseña existente
-        nombre: user.nombre || '',
-        apellido: user.apellido || '',
-        id_rol: user.id_rol || ''
-      });
-    }
-  }, [user]);
-
-  const loadRoles = async () => {
-    try {
-      // NOTA: Necesitarás crear un servicio para roles
-      // Por ahora usamos datos de ejemplo
-      const exampleRoles = [
-        { id_rol: 1, nombre_rol: 'Administrador' },
-        { id_rol: 2, nombre_rol: 'Coordinador' },
-        { id_rol: 3, nombre_rol: 'Profesor' }
-      ];
-      setRoles(exampleRoles);
-    } catch (err) {
-      console.error('Error loading roles:', err);
-    }
-  };
 
   const handleChange = (e) => {
     setFormData({
@@ -57,127 +34,145 @@ const UserForm = ({ user, onClose, onSave }) => {
     setLoading(true);
     setError('');
 
+    // Validación básica
+    if (!formData.nombre_usuario || !formData.correo || !formData.password || 
+        !formData.nombre_rol || !formData.nombre || !formData.apellido) {
+      setError('Todos los campos son obligatorios');
+      setLoading(false);
+      return;
+    }
+
     try {
-      if (user) {
-        // Actualizar usuario
-        await userService.updateUser(user.id_usuario, formData);
-      } else {
-        // Crear nuevo usuario
-        await userService.createUser(formData);
-      }
-      onSave();
+      await userService.createUser(formData);
+      onUserCreated();
     } catch (err) {
-      setError(err.message);
+      setError(err.message || 'Error al crear usuario');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal">
-        <div className="modal-header">
-          <h3>{user ? 'Editar Usuario' : 'Crear Nuevo Usuario'}</h3>
-          <button className="close-btn" onClick={onClose}>×</button>
+    <div className="user-form-container">
+      <h2>Crear Nuevo Usuario</h2>
+      
+      {error && <div className="error-message">{error}</div>}
+      
+      <form onSubmit={handleSubmit} className="user-form">
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="nombre">Nombre *</label>
+            <input
+              type="text"
+              id="nombre"
+              name="nombre"
+              value={formData.nombre}
+              onChange={handleChange}
+              required
+              disabled={loading}
+              placeholder="Juan"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="apellido">Apellido *</label>
+            <input
+              type="text"
+              id="apellido"
+              name="apellido"
+              value={formData.apellido}
+              onChange={handleChange}
+              required
+              disabled={loading}
+              placeholder="Pérez"
+            />
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-grid">
-            <div className="form-group">
-              <label>Nombre *</label>
-              <input
-                type="text"
-                name="nombre"
-                value={formData.nombre}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Apellido *</label>
-              <input
-                type="text"
-                name="apellido"
-                value={formData.apellido}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Nombre de Usuario *</label>
-              <input
-                type="text"
-                name="nombre_usuario"
-                value={formData.nombre_usuario}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Correo Electrónico *</label>
-              <input
-                type="email"
-                name="correo"
-                value={formData.correo}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Contraseña {!user && '*'}</label>
-              <input
-                type="password"
-                name="hash_contrasena"
-                value={formData.hash_contrasena}
-                onChange={handleChange}
-                required={!user}
-                placeholder={user ? 'Dejar vacío para mantener actual' : ''}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Rol *</label>
-              <select
-                name="id_rol"
-                value={formData.id_rol}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Seleccionar rol</option>
-                {roles.map(role => (
-                  <option key={role.id_rol} value={role.id_rol}>
-                    {role.nombre_rol}
-                  </option>
-                ))}
-              </select>
-            </div>
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="nombre_usuario">Nombre de Usuario *</label>
+            <input
+              type="text"
+              id="nombre_usuario"
+              name="nombre_usuario"
+              value={formData.nombre_usuario}
+              onChange={handleChange}
+              required
+              disabled={loading}
+              placeholder="juan.perez"
+            />
           </div>
 
-          {error && <div className="error-message">{error}</div>}
-
-          <div className="form-actions">
-            <button
-              type="button"
-              className="btn-secondary"
-              onClick={onClose}
+          <div className="form-group">
+            <label htmlFor="correo">Correo Electrónico *</label>
+            <input
+              type="email"
+              id="correo"
+              name="correo"
+              value={formData.correo}
+              onChange={handleChange}
+              required
               disabled={loading}
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              className="btn-primary"
-              disabled={loading}
-            >
-              {loading ? 'Guardando...' : (user ? 'Actualizar' : 'Crear Usuario')}
-            </button>
+              placeholder="juan@example.com"
+            />
           </div>
-        </form>
-      </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="password">Contraseña *</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              disabled={loading}
+              placeholder="Mínimo 6 caracteres"
+              minLength={6}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="nombre_rol">Rol *</label>
+            <select
+              id="nombre_rol"
+              name="nombre_rol"
+              value={formData.nombre_rol}
+              onChange={handleChange}
+              required
+              disabled={loading}
+            >
+              <option value="">Seleccionar rol...</option>
+              {ROLES_OPTIONS.map((role) => (
+                <option key={role.value} value={role.value}>
+                  {role.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="form-actions">
+          <button 
+            type="button" 
+            className="btn-secondary"
+            onClick={onCancel}
+            disabled={loading}
+          >
+            Cancelar
+          </button>
+          <button 
+            type="submit" 
+            className="btn-primary"
+            disabled={loading}
+          >
+            {loading ? 'Creando...' : 'Crear Usuario'}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
