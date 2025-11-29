@@ -3,14 +3,25 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import UserManagement from '../UserManagement/UserManagement';
 import GrupoManagement from '../GrupoEstudiante/GrupoManagement';
+import SalonManagement from '../Salon/SalonManagement';
 import './Dashboard.css';
 
 const Dashboard = () => {
-  const { currentUser, logout, isAdmin, isCoordinador } = useAuth();
+  const { currentUser, logout, isAdmin, isCoordinador, isCoordinadorInfra } = useAuth();
+  
+  // Debug en consola
+  console.log('📊 Dashboard - Roles:', {
+    isAdmin,
+    isCoordinador,
+    isCoordinadorInfra,
+    id_rol: currentUser?.id_rol
+  });
+  
   const [activeModule, setActiveModule] = useState(() => {
     // Módulo inicial según el rol
     if (isAdmin) return 'usuarios';
     if (isCoordinador) return 'grupos';
+    if (isCoordinadorInfra) return 'salones';
     return 'inicio';
   });
 
@@ -26,6 +37,8 @@ const Dashboard = () => {
   };
 
   const renderContent = () => {
+    console.log('🎯 Renderizando módulo:', activeModule);
+    
     switch (activeModule) {
       case 'usuarios':
         return isAdmin ? <UserManagement /> : <AccessDenied />;
@@ -33,9 +46,18 @@ const Dashboard = () => {
       case 'grupos':
         return isCoordinador ? <GrupoManagement /> : <AccessDenied />;
       
+      case 'salones':
+        console.log('🏢 Cargando SalonManagement, isCoordinadorInfra:', isCoordinadorInfra);
+        return isCoordinadorInfra ? <SalonManagement /> : <AccessDenied />;
+      
       case 'inicio':
       default:
-        return <WelcomeScreen isAdmin={isAdmin} isCoordinador={isCoordinador} setActiveModule={setActiveModule} />;
+        return <WelcomeScreen 
+          isAdmin={isAdmin} 
+          isCoordinador={isCoordinador} 
+          isCoordinadorInfra={isCoordinadorInfra}
+          setActiveModule={setActiveModule} 
+        />;
     }
   };
 
@@ -57,14 +79,22 @@ const Dashboard = () => {
       <nav className="dashboard-nav">
         <ul>
           <li className={activeModule === 'inicio' ? 'nav-active' : ''}>
-            <a href="#inicio" onClick={(e) => { e.preventDefault(); setActiveModule('inicio'); }}>
+            <a href="#inicio" onClick={(e) => { 
+              e.preventDefault(); 
+              console.log('Navegando a: inicio');
+              setActiveModule('inicio'); 
+            }}>
               🏠 Inicio
             </a>
           </li>
           
           {isAdmin && (
             <li className={activeModule === 'usuarios' ? 'nav-active' : ''}>
-              <a href="#usuarios" onClick={(e) => { e.preventDefault(); setActiveModule('usuarios'); }}>
+              <a href="#usuarios" onClick={(e) => { 
+                e.preventDefault(); 
+                console.log('Navegando a: usuarios');
+                setActiveModule('usuarios'); 
+              }}>
                 👥 Gestión de Usuarios
               </a>
             </li>
@@ -72,26 +102,51 @@ const Dashboard = () => {
           
           {isCoordinador && (
             <li className={activeModule === 'grupos' ? 'nav-active' : ''}>
-              <a href="#grupos" onClick={(e) => { e.preventDefault(); setActiveModule('grupos'); }}>
+              <a href="#grupos" onClick={(e) => { 
+                e.preventDefault(); 
+                console.log('Navegando a: grupos');
+                setActiveModule('grupos'); 
+              }}>
                 📚 Grupos de Estudiantes
               </a>
             </li>
           )}
           
+          {isCoordinadorInfra && (
+            <li className={activeModule === 'salones' ? 'nav-active' : ''}>
+              <a href="#salones" onClick={(e) => { 
+                e.preventDefault(); 
+                console.log('🏢 Navegando a: salones');
+                setActiveModule('salones'); 
+              }}>
+                🏢 Gestión de Salones
+              </a>
+            </li>
+          )}
+          
           <li className={activeModule === 'profesores' ? 'nav-active' : ''}>
-            <a href="#profesores" onClick={(e) => { e.preventDefault(); setActiveModule('profesores'); }}>
+            <a href="#profesores" onClick={(e) => { 
+              e.preventDefault(); 
+              setActiveModule('profesores'); 
+            }}>
               👨‍🏫 Profesores
             </a>
           </li>
           
           <li className={activeModule === 'asignaciones' ? 'nav-active' : ''}>
-            <a href="#asignaciones" onClick={(e) => { e.preventDefault(); setActiveModule('asignaciones'); }}>
+            <a href="#asignaciones" onClick={(e) => { 
+              e.preventDefault(); 
+              setActiveModule('asignaciones'); 
+            }}>
               📅 Asignaciones
             </a>
           </li>
           
           <li className={activeModule === 'reportes' ? 'nav-active' : ''}>
-            <a href="#reportes" onClick={(e) => { e.preventDefault(); setActiveModule('reportes'); }}>
+            <a href="#reportes" onClick={(e) => { 
+              e.preventDefault(); 
+              setActiveModule('reportes'); 
+            }}>
               📊 Reportes
             </a>
           </li>
@@ -106,7 +161,13 @@ const Dashboard = () => {
 };
 
 // Componente de pantalla de bienvenida
-const WelcomeScreen = ({ isAdmin, isCoordinador, setActiveModule }) => {
+const WelcomeScreen = ({ isAdmin, isCoordinador, isCoordinadorInfra, setActiveModule }) => {
+  console.log('🏠 WelcomeScreen - Mostrando tarjetas para:', {
+    isAdmin,
+    isCoordinador,
+    isCoordinadorInfra
+  });
+
   return (
     <div className="welcome-section">
       <h2>Bienvenido al Sistema GHP-SASCE</h2>
@@ -114,7 +175,10 @@ const WelcomeScreen = ({ isAdmin, isCoordinador, setActiveModule }) => {
       
       <div className="quick-stats">
         {isAdmin && (
-          <div className="stat-card" onClick={() => setActiveModule('usuarios')}>
+          <div className="stat-card" onClick={() => {
+            console.log('Click en tarjeta: usuarios');
+            setActiveModule('usuarios');
+          }}>
             <div className="stat-icon">👥</div>
             <div className="stat-content">
               <h3>Usuarios</h3>
@@ -125,12 +189,30 @@ const WelcomeScreen = ({ isAdmin, isCoordinador, setActiveModule }) => {
         )}
         
         {isCoordinador && (
-          <div className="stat-card" onClick={() => setActiveModule('grupos')}>
+          <div className="stat-card" onClick={() => {
+            console.log('Click en tarjeta: grupos');
+            setActiveModule('grupos');
+          }}>
             <div className="stat-icon">📚</div>
             <div className="stat-content">
               <h3>Grupos de Estudiantes</h3>
               <p>Administre grupos de estudiantes</p>
               <span className="stat-link">Ir a grupos →</span>
+            </div>
+          </div>
+        )}
+        
+        {/* ✅ TARJETA DE SALONES - DEBE APARECER PARA COORDINADOR DE INFRAESTRUCTURA */}
+        {isCoordinadorInfra && (
+          <div className="stat-card" onClick={() => {
+            console.log('🏢 Click en tarjeta: salones');
+            setActiveModule('salones');
+          }}>
+            <div className="stat-icon">🏢</div>
+            <div className="stat-content">
+              <h3>Gestión de Salones</h3>
+              <p>Registre y administre salones</p>
+              <span className="stat-link">Ir a salones →</span>
             </div>
           </div>
         )}
