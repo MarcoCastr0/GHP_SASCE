@@ -45,6 +45,10 @@ export const AuthProvider = ({ children }) => {
     return currentUser && currentUser.id_rol === 2;
   };
 
+  const isCoordinadorInfra = () => {
+    return currentUser && currentUser.id_rol === 3;
+  };
+
   const value = {
     currentUser,
     login,
@@ -52,6 +56,7 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated: !!currentUser,
     isAdmin: isAdmin(),
     isCoordinador: isCoordinador(),
+    isCoordinadorInfra: isCoordinadorInfra(), // ✅ AGREGADO AL VALUE
   };
 
   return (
