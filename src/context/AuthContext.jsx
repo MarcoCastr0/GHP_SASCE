@@ -41,12 +41,17 @@ export const AuthProvider = ({ children }) => {
     return currentUser && currentUser.id_rol === 1;
   };
 
+  const isCoordinador = () => {
+    return currentUser && currentUser.id_rol === 2;
+  };
+
   const value = {
     currentUser,
     login,
     logout,
     isAuthenticated: !!currentUser,
     isAdmin: isAdmin(),
+    isCoordinador: isCoordinador(),
   };
 
   return (

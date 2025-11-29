@@ -4,18 +4,13 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Login from '../pages/Login/Login';
 import Dashboard from '../pages/Dashboard/Dashboard';
-import UserManagement from '../pages/UserManagement/UserManagement';
 
 // Componente para rutas protegidas
-const ProtectedRoute = ({ children, requireAdmin = false }) => {
-  const { isAuthenticated, isAdmin } = useAuth();
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated } = useAuth();
   
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
-  }
-  
-  if (requireAdmin && !isAdmin) {
-    return <Navigate to="/dashboard" />;
   }
   
   return children;
@@ -40,7 +35,7 @@ const AppRoutes = () => {
         } 
       />
       
-      {/* Ruta protegida - Dashboard */}
+      {/* Ruta protegida - Dashboard (contiene todo) */}
       <Route 
         path="/dashboard" 
         element={
@@ -50,21 +45,11 @@ const AppRoutes = () => {
         } 
       />
       
-      {/* Ruta protegida - Gestión de Usuarios (SOLO ADMIN) */}
-      <Route 
-        path="/usuarios" 
-        element={
-          <ProtectedRoute requireAdmin={true}>
-            <UserManagement />
-          </ProtectedRoute>
-        } 
-      />
-      
       {/* Ruta por defecto */}
       <Route path="/" element={<Navigate to="/dashboard" />} />
       
       {/* Ruta 404 */}
-      <Route path="*" element={<div>Página no encontrada</div>} />
+      <Route path="*" element={<Navigate to="/dashboard" />} />
     </Routes>
   );
 };
