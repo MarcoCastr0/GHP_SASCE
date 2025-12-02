@@ -1,9 +1,10 @@
-// src/pages/SalonManagement/SalonManagement.jsx
+// src/pages/Salon/SalonManagement.jsx - COMPLETO CON CU6
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { salonService } from '../../services/salonService';
 import SalonList from './SalonList';
 import SalonForm from './SalonForm';
+import DisponibilidadManagement from './DisponibilidadManagement';
 import './SalonManagement.css';
 
 const SalonManagement = () => {
@@ -12,6 +13,8 @@ const SalonManagement = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const [showDisponibilidad, setShowDisponibilidad] = useState(false);
+  const [selectedSalonForDisponibilidad, setSelectedSalonForDisponibilidad] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -56,6 +59,18 @@ const SalonManagement = () => {
     setError('');
   };
 
+  // NUEVO: Gestionar disponibilidad
+  const handleGestionarDisponibilidad = (salon) => {
+    setSelectedSalonForDisponibilidad(salon);
+    setShowDisponibilidad(true);
+    setShowForm(false);
+  };
+
+  const handleBackFromDisponibilidad = () => {
+    setShowDisponibilidad(false);
+    setSelectedSalonForDisponibilidad(null);
+  };
+
   if (!isCoordinadorInfra) {
     return (
       <div className="salon-management">
@@ -67,13 +82,27 @@ const SalonManagement = () => {
     );
   }
 
+  // NUEVO: Mostrar vista de disponibilidad
+  if (showDisponibilidad && selectedSalonForDisponibilidad) {
+    return (
+      <div className="salon-management">
+        <DisponibilidadManagement
+          salon={selectedSalonForDisponibilidad}
+          onBack={handleBackFromDisponibilidad}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="salon-management">
       <div className="salon-management-header">
         <div className="header-title">
           <h1>🏢 Gestión de Salones</h1>
           <p className="header-subtitle">
-            Administre y registre salones y sus recursos
+            {showForm 
+              ? 'Registrar nuevo salón' 
+              : 'Administre y registre salones y sus recursos'}
           </p>
         </div>
         
@@ -119,7 +148,10 @@ const SalonManagement = () => {
               <p>Cargando salones...</p>
             </div>
           ) : (
-            <SalonList salones={salones} />
+            <SalonList 
+              salones={salones}
+              onGestionarDisponibilidad={handleGestionarDisponibilidad}
+            />
           )}
         </>
       )}

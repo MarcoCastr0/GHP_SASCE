@@ -249,6 +249,7 @@
   transition: all 0.3s ease;
   font-family: inherit;
   background: white;
+
 }
 
 .form-group input:focus,
@@ -603,6 +604,348 @@ button:disabled {
   color: #64748b;
   font-size: 1rem;
   margin: 0;
+}
+
+/* ==================== GESTIÓN DE DISPONIBILIDAD ==================== */
+.disponibilidad-management {
+  animation: fadeIn 0.4s ease;
+}
+
+.disponibilidad-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.disponibilidad-header h2 {
+  color: #1e293b;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0.5rem 0 0.3rem 0;
+}
+
+.disponibilidad-subtitle {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.btn-disponibilidad {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.btn-disponibilidad:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+/* FILTROS DE DISPONIBILIDAD */
+.disponibilidad-filters {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 14px;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.disponibilidad-filters .filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: black;
+}
+
+.disponibilidad-filters label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #1e293b;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.disponibilidad-filters select {
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: black;
+}
+
+.disponibilidad-filters select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* FORMULARIO DE DISPONIBILIDAD */
+.disponibilidad-form-container {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+  animation: fadeIn 0.4s ease;
+}
+
+.disponibilidad-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.info-box-warning {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-left: 4px solid #f59e0b;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.info-box-warning p {
+  margin: 0;
+  color: #92400e;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* CALENDARIO DE DISPONIBILIDAD */
+.disponibilidad-calendar {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  color: black;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.calendar-day-column {
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f8fafc;
+
+}
+
+.calendar-day-header {
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  color: white;
+  padding: 0.8rem;
+  text-align: center;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+
+.ocupaciones-count {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.calendar-day-body {
+  padding: 0.8rem;
+  min-height: 200px;
+}
+
+.no-ocupaciones-dia {
+  text-align: center;
+  padding: 2rem 0.5rem;
+  color: #10b981;
+  font-size: 0.85rem;
+}
+
+.ocupaciones-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.ocupacion-card {
+  background: white;
+  padding: 0.8rem;
+  border-radius: 10px;
+  border: 2px solid #fee2e2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.ocupacion-card:hover {
+  border-color: #fecaca;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.ocupacion-time {
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 0.85rem;
+  margin-bottom: 0.4rem;
+}
+
+.ocupacion-motivo {
+  color: #475569;
+  font-size: 0.8rem;
+  margin-bottom: 0.4rem;
+  line-height: 1.4;
+}
+
+.ocupacion-fecha {
+  color: #94a3b8;
+  font-size: 0.7rem;
+  margin-bottom: 0.6rem;
+}
+
+.btn-delete-ocupacion {
+  width: 100%;
+  padding: 0.4rem;
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-delete-ocupacion:hover {
+  background: #fecaca;
+  transform: translateY(-1px);
+}
+
+.calendar-legend {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+}
+
+.calendar-legend h4 {
+  color: #1e293b;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+}
+
+.legend-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem;
+  background: white;
+  border-radius: 8px;
+}
+
+.stat-label {
+  color: #64748b;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.stat-value {
+  color: #1e293b;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* ESTADO VACÍO */
+.no-ocupaciones {
+  padding: 3rem 2rem;
+}
+
+.empty-state-small {
+  text-align: center;
+  background: #f8fafc;
+  padding: 2rem;
+  border-radius: 12px;
+  border: 2px dashed #e2e8f0;
+}
+
+.empty-icon-small {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-state-small p {
+  color: #64748b;
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+}
+
+.empty-state-small small {
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1200px) {
+  .calendar-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .disponibilidad-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .disponibilidad-header button {
+    width: 100%;
+  }
+
+  .disponibilidad-filters {
+    grid-template-columns: 1fr;
+  
+  }
+
+  .calendar-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .legend-stats {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ==================== RESPONSIVE ==================== */
