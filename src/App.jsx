@@ -8,7 +8,7 @@ import './App.css';
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <Router basename="/GHP_SASCE">  {/* ← AGREGAR ESTO */}
         <div className="App">
           <AppRoutes />
         </div>

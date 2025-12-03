@@ -30,7 +30,6 @@ jobs:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
         run: npm run build
 
-      # Copiar index.html como 404.html para manejar rutas SPA
       - name: Copy index.html to 404.html
         run: cp dist/index.html dist/404.html
 
