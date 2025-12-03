@@ -2,8 +2,8 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]  # Se ejecuta cuando hay push a main
-  workflow_dispatch:    # También permite ejecución manual
+    branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -30,9 +30,12 @@ jobs:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
         run: npm run build
 
+      # Copiar index.html como 404.html para manejar rutas SPA
+      - name: Copy index.html to 404.html
+        run: cp dist/index.html dist/404.html
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          cname: # Opcional: tu dominio personalizado si lo tienes
