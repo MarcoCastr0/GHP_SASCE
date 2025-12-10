@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import { profesorService } from "../../services/profesorService"
 
 const Profesores = ({ setActiveModule }) => {
+  console.log("[v0] Profesores component mounted, setActiveModule is:", typeof setActiveModule, setActiveModule)
+
   const [profesores, setProfesores] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -26,9 +28,14 @@ const Profesores = ({ setActiveModule }) => {
     }
   }
 
-  const handleProfesorCreado = () => {
-    cargarProfesores()
-    setActiveModule("listaProfesores")
+  const handleCrearProfesor = () => {
+    console.log("[v0] Button clicked, calling setActiveModule with 'crearProfesor'")
+    console.log("[v0] setActiveModule is:", typeof setActiveModule)
+    if (typeof setActiveModule === "function") {
+      setActiveModule("crearProfesor")
+    } else {
+      console.error("[v0] ERROR: setActiveModule is not a function!", setActiveModule)
+    }
   }
 
   if (loading) {
@@ -41,7 +48,7 @@ const Profesores = ({ setActiveModule }) => {
 
       {/* BOTÓN CREAR PROFESOR */}
       <button
-        onClick={() => setActiveModule("crearProfesor")}
+        onClick={handleCrearProfesor}
         style={{
           marginBottom: "15px",
           padding: "10px 16px",
