@@ -5,7 +5,8 @@ import UserManagement from '../UserManagement/UserManagement';
 import GrupoManagement from '../GrupoEstudiante/GrupoManagement';
 import SalonManagement from '../Salon/SalonManagement';
 import './Dashboard.css';
-import CrearProfesor from "../Profesor/CrearProfesor";
+import Profesores from "../Profesor/Profesores";
+
 
 
 
@@ -40,35 +41,41 @@ const Dashboard = () => {
   };
 
   const renderContent = () => {
-    console.log('🎯 Renderizando módulo:', activeModule);
-    
-    switch (activeModule) {
-      case 'usuarios':
-        return isAdmin ? <UserManagement /> : <AccessDenied />;
-      
-      case 'grupos':
-        return isCoordinador ? <GrupoManagement /> : <AccessDenied />;
-      
-      case 'salones':
-        console.log('🏢 Cargando SalonManagement, isCoordinadorInfra:', isCoordinadorInfra);
-        return isCoordinadorInfra ? <SalonManagement /> : <AccessDenied />;
-      
-      case 'inicio':
-      default:
-        return <WelcomeScreen 
-          isAdmin={isAdmin} 
-          isCoordinador={isCoordinador} 
+  console.log('🎯 Renderizando módulo:', activeModule);
+  
+  switch (activeModule) {
+    case 'usuarios':
+      return isAdmin ? <UserManagement /> : <AccessDenied />;
+
+    case 'grupos':
+      return isCoordinador ? <GrupoManagement /> : <AccessDenied />;
+
+    case 'salones':
+      console.log('🏢 Cargando SalonManagement, isCoordinadorInfra:', isCoordinadorInfra);
+      return isCoordinadorInfra ? <SalonManagement /> : <AccessDenied />;
+
+    case 'profesores':
+      return <Profesores />;  // ✅ CORREGIDO
+
+    case 'asignaciones':
+      return <h2>Asignaciones (próximamente)</h2>;
+
+    case 'reportes':
+      return <h2>Reportes (próximamente)</h2>;
+
+    case 'inicio':
+    default:
+      return (
+        <WelcomeScreen
+          isAdmin={isAdmin}
+          isCoordinador={isCoordinador}
           isCoordinadorInfra={isCoordinadorInfra}
-          setActiveModule={setActiveModule} 
-        />;
+          setActiveModule={setActiveModule}
+        />
+      );
+  }
+};
 
-      
-      
-      case 'profesores':
-        return <CrearProfesor />;
-
-    }
-  };
 
   return (
     <div className="dashboard">
