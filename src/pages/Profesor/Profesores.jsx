@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { profesorService } from "../../services/profesorService";
 import { useNavigate } from "react-router-dom";
 
-const Profesores = () => {
+const Profesores = ({ setActiveModule }) => {
   const [profesores, setProfesores] = useState([]);
   const navigate = useNavigate();
 
@@ -24,18 +24,19 @@ const Profesores = () => {
       <h2>Profesores</h2>
 
       {/* BOTÓN CREAR PROFESOR */}
-      <button
-        onClick={() => navigate("/dashboard/profesores/crear")}
+     <button
+     onClick={() => setActiveModule("crearProfesor")}
         style={{
-          marginBottom: "15px",
-          padding: "8px 12px",
-          background: "green",
-          color: "white",
-          border: "none",
-        }}
-      >
-        ➕ Crear Profesor
-      </button>
+        marginBottom: "15px",
+        padding: "8px 12px",
+        background: "green",
+        color: "white",
+        border: "none",
+    }}
+    >
+     ➕ Crear Profesor
+    </button>
+
 
       {/* TABLA */}
       <table border="1" cellPadding="8" style={{ width: "100%", borderCollapse: "collapse" }}>

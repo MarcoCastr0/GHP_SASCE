@@ -6,6 +6,9 @@ import GrupoManagement from '../GrupoEstudiante/GrupoManagement';
 import SalonManagement from '../Salon/SalonManagement';
 import './Dashboard.css';
 import Profesores from "../Profesor/Profesores";
+// NUEVO
+import CrearProfesor from "../Profesor/CrearProfesor";
+
 
 
 
@@ -56,6 +59,9 @@ const Dashboard = () => {
 
     case 'profesores':
       return <Profesores />;  // ✅ CORREGIDO
+
+    case "crearProfesor":
+      return <CrearProfesor setActiveModule={setActiveModule} />;
 
     case 'asignaciones':
       return <h2>Asignaciones (próximamente)</h2>;
