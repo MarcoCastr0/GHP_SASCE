@@ -9,9 +9,9 @@ const CrearProfesor = () => {
     try {
       const response = await profesorService.createProfesor(data);
       setMensaje("Profesor creado con éxito ✔️");
-      console.log("Respuesta servidor:", response);
+      console.log("Respuesta del servidor:", response);
     } catch (error) {
-      setMensaje("Error: " + error.message);
+      setMensaje("Error: " + (error.response?.data?.message || error.message));
     }
   };
 

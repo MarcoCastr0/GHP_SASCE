@@ -5,6 +5,9 @@ import UserManagement from '../UserManagement/UserManagement';
 import GrupoManagement from '../GrupoEstudiante/GrupoManagement';
 import SalonManagement from '../Salon/SalonManagement';
 import './Dashboard.css';
+import CrearProfesor from "../Profesor/CrearProfesor";
+
+
 
 const Dashboard = () => {
   const { currentUser, logout, isAdmin, isCoordinador, isCoordinadorInfra } = useAuth();
@@ -58,6 +61,12 @@ const Dashboard = () => {
           isCoordinadorInfra={isCoordinadorInfra}
           setActiveModule={setActiveModule} 
         />;
+
+      
+      
+      case 'profesores':
+        return <CrearProfesor />;
+
     }
   };
 
