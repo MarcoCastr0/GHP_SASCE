@@ -52,7 +52,7 @@ const Profesores = ({ setActiveModule }) => {
         style={{
           marginBottom: "15px",
           padding: "10px 16px",
-          background: "#28a745",
+          background: "#5c6abbff",
           color: "white",
           border: "none",
           borderRadius: "4px",
