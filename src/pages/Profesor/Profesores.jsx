@@ -1,64 +1,111 @@
-import React, { useEffect, useState } from "react";
-import { profesorService } from "../../services/profesorService";
-import { useNavigate } from "react-router-dom";
+"use client"
+
+import { useEffect, useState } from "react"
+import { profesorService } from "../../services/profesorService"
 
 const Profesores = ({ setActiveModule }) => {
-  const [profesores, setProfesores] = useState([]);
-  const navigate = useNavigate();
+  const [profesores, setProfesores] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    cargarProfesores();
-  }, []);
+    cargarProfesores()
+  }, [])
 
   const cargarProfesores = async () => {
     try {
-      const response = await profesorService.getProfesores();
-      setProfesores(response.data || []);
+      setLoading(true)
+      setError(null)
+      const response = await profesorService.getProfesores()
+      setProfesores(response.data || [])
     } catch (error) {
-      console.error("Error cargando profesores:", error);
+      console.error("Error cargando profesores:", error)
+      setError("Error al cargar los profesores. Por favor, intenta nuevamente.")
+    } finally {
+      setLoading(false)
     }
-  };
+  }
+
+  const handleProfesorCreado = () => {
+    cargarProfesores()
+    setActiveModule("listaProfesores")
+  }
+
+  if (loading) {
+    return <div style={{ padding: "20px", textAlign: "center" }}>Cargando profesores...</div>
+  }
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>Profesores</h2>
+      <h2>Gestión de Profesores</h2>
 
       {/* BOTÓN CREAR PROFESOR */}
-     <button
-     onClick={() => setActiveModule("crearProfesor")}
+      <button
+        onClick={() => setActiveModule("crearProfesor")}
         style={{
-        marginBottom: "15px",
-        padding: "8px 12px",
-        background: "green",
-        color: "white",
-        border: "none",
-    }}
-    >
-     ➕ Crear Profesor
-    </button>
+          marginBottom: "15px",
+          padding: "10px 16px",
+          background: "#28a745",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer",
+          fontSize: "14px",
+          fontWeight: "bold",
+        }}
+      >
+        ➕ Crear Profesor
+      </button>
 
+      {/* MENSAJE DE ERROR */}
+      {error && (
+        <div
+          style={{
+            marginBottom: "15px",
+            padding: "10px",
+            background: "#f8d7da",
+            color: "#721c24",
+            border: "1px solid #f5c6cb",
+            borderRadius: "4px",
+          }}
+        >
+          {error}
+        </div>
+      )}
 
       {/* TABLA */}
-      <table border="1" cellPadding="8" style={{ width: "100%", borderCollapse: "collapse" }}>
+      <table
+        border="1"
+        cellPadding="8"
+        style={{
+          width: "100%",
+          borderCollapse: "collapse",
+          fontSize: "14px",
+        }}
+      >
         <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre completo</th>
-            <th>Correo</th>
-            <th>Identificación</th>
+          <tr style={{ background: "#f8f9fa" }}>
+            <th style={{ textAlign: "left" }}>ID</th>
+            <th style={{ textAlign: "left" }}>Nombre Completo</th>
+            <th style={{ textAlign: "left" }}>Correo</th>
+            <th style={{ textAlign: "left" }}>Identificación</th>
           </tr>
         </thead>
 
         <tbody>
           {profesores.length === 0 ? (
             <tr>
-              <td colSpan="4" style={{ textAlign: "center" }}>No hay profesores registrados</td>
+              <td colSpan="4" style={{ textAlign: "center", padding: "20px" }}>
+                No hay profesores registrados
+              </td>
             </tr>
           ) : (
             profesores.map((p) => (
               <tr key={p.id_profesor}>
                 <td>{p.id_profesor}</td>
-                <td>{p.usuario?.nombre} {p.usuario?.apellido}</td>
+                <td>
+                  {p.usuario?.nombre} {p.usuario?.apellido}
+                </td>
                 <td>{p.usuario?.correo}</td>
                 <td>{p.numero_identificacion}</td>
               </tr>
@@ -67,7 +114,7 @@ const Profesores = ({ setActiveModule }) => {
         </tbody>
       </table>
     </div>
-  );
-};
+  )
+}
 
-export default Profesores;
+export default Profesores
